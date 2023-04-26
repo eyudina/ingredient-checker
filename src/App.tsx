@@ -10,7 +10,7 @@ import { IngredientsTable } from "components/IngredientsTable";
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="/ingredient-checker">
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<IngredientsTable />} />

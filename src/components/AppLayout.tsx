@@ -23,7 +23,7 @@ const items = [
     type: "item",
     label: "Properties",
     icon: <DatabaseOutlined />,
-    path: "properties",
+    path: "/properties",
   },
   {
     key: "logout",
@@ -36,7 +36,7 @@ const items = [
 
 export const AppLayout = () => {
   const [pageTitle, setPageTitle] = useState("Ingredients");
-  const [selectedKey, setSelectedKey] = useState("ingredients");
+  const [selectedKey, setSelectedKey] = useState("/");
   const location = useLocation();
 
   useLayoutEffect(() => {
