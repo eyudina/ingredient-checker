@@ -4,6 +4,7 @@
   "homepage": "https://eyudina.github.io/ingredient-checker/",
   "private": true,
   "dependencies": {
+    "@ant-design/pro-components": "^2.4.9",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

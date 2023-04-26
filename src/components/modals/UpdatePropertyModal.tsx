@@ -13,7 +13,7 @@ type Props = {
   callback?: () => any;
 };
 
-export const UpdatePropertyModal = (props: Props) => {
+const UpdatePropertyModal = (props: Props) => {
   const [propertyName, setPropertyName] = useState(props.name);
   const [descriptionName, setDescriptionName] = useState(props.description);
 
@@ -69,3 +69,5 @@ export const UpdatePropertyModal = (props: Props) => {
     </ConfirmationModal>
   );
 };
+
+export default UpdatePropertyModal;

@@ -1,14 +1,14 @@
-import { Table, Button, Tag, Space } from "antd";
-import { ColumnsType } from "antd/lib/table";
-import { TIngredient, TProperty } from "../types";
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 import { useState } from "react";
-import AddIngredientModal from "./modals/AddIngredientModal";
-import { RemoveIngredientModal } from "./modals/RemoveIngredientModal";
-import UpdateIngredientModal from "./modals/UpdateIngredientModal";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ColumnsType } from "antd/lib/table";
+import { Table, Button, Tag, Space } from "antd";
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
+import { RootState } from "../store/store";
+import { TIngredient, TProperty } from "../types";
+import AddIngredientModal from "./modals/AddIngredientModal";
+import UpdateIngredientModal from "./modals/UpdateIngredientModal";
+import RemoveIngredientModal from "./modals/RemoveIngredientModal";
 
 export const IngredientsTable = () => {
   const navigate = useNavigate();

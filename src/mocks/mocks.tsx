@@ -84,7 +84,7 @@ export const properties: { name: string; description: string }[] = [
   },
 ];
 
-export const propertiesList: TProperty[] = properties.map((property) => {
+export const mockPropertiesList: TProperty[] = properties.map((property) => {
   return {
     id: uuidv4(),
     name: property.name,
@@ -93,7 +93,7 @@ export const propertiesList: TProperty[] = properties.map((property) => {
 });
 
 const getPropertiesNames = (properties: string[]): TProperty[] => {
-  return propertiesList.filter((property) =>
+  return mockPropertiesList.filter((property) =>
     properties.includes(property.name)
   );
 };

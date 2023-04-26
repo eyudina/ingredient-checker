@@ -7,7 +7,7 @@ type Props = {
   callback?: () => any;
 };
 
-export const RemovePropertyModal = (props: Props) => {
+const RemovePropertyModal = (props: Props) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
@@ -17,3 +17,5 @@ export const RemovePropertyModal = (props: Props) => {
 
   return <ConfirmationModal title="Remove Property" onConfirm={handleDelete} />;
 };
+
+export default RemovePropertyModal;

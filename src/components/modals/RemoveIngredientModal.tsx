@@ -7,7 +7,7 @@ type Props = {
   callback?: () => any;
 };
 
-export const RemoveIngredientModal = (props: Props) => {
+const RemoveIngredientModal = (props: Props) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
@@ -19,3 +19,5 @@ export const RemoveIngredientModal = (props: Props) => {
     <ConfirmationModal title="Remove Ingredient" onConfirm={handleDelete} />
   );
 };
+
+export default RemoveIngredientModal;

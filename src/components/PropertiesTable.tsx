@@ -1,32 +1,30 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { TProperty } from "types";
+import { useLocation } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { Table, Tag, Button, Space } from "antd";
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import { AddPropertyModal } from "./modals/AddPropertyModal";
-import { UpdatePropertyModal } from "./modals/UpdatePropertyModal";
-import { RemovePropertyModal } from "./modals/RemovePropertyModal";
-import { useLocation } from "react-router-dom";
+import { RootState } from "../store/store";
+import { TProperty } from "types";
+import AddPropertyModal from "./modals/AddPropertyModal";
+import UpdatePropertyModal from "./modals/UpdatePropertyModal";
+import RemovePropertyModal from "./modals/RemovePropertyModal";
 
 export const PropertiesTable = () => {
   const location = useLocation();
 
   const [showAddPropertyModal, setShowAddPropertyModal] = useState(false);
-
-  const queryParams = new URLSearchParams(location.search);
-
-  const selectedPropertyName = queryParams.get("name");
-
-  const [filteredName, setFilteredName] = useState<string | undefined>(
-    selectedPropertyName || undefined
-  );
   const [recordToDelete, setRecordToDelete] = useState<string | undefined>(
     undefined
   );
   const [recordToUpdate, setRecordToUpdate] = useState<TProperty | undefined>(
     undefined
+  );
+
+  const queryParams = new URLSearchParams(location.search);
+  const selectedPropertyName = queryParams.get("name");
+  const [filteredName, setFilteredName] = useState<string | undefined>(
+    selectedPropertyName || undefined
   );
 
   const properties = useSelector((state: RootState) => state.property);
