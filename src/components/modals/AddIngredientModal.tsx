@@ -39,7 +39,7 @@ const AddIngredientModal = (props: Props) => {
             selectedProperties.find((p) => p === property.name)
           )
           .map((property) => {
-            return { id: property.id, name: property.name };
+            return { id: property.id };
           }),
       };
       dispatch(addIngredient(newIngredient));

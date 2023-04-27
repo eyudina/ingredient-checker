@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Input, Button, Tooltip, message } from "antd";
 import { InfoCircleTwoTone, UserOutlined } from "@ant-design/icons";
-import { TUser } from "types";
+import { TUser, UserRole } from "types";
 import { mockUserList } from "../mocks/mocks";
 import { loginFailure, loginSuccess } from "../redux/authSlice";
 
@@ -19,7 +19,7 @@ const LoginPage = () => {
       (user) => user.email === email && user.password === password
     );
 
-    if (user?.role === "user" || user?.role === "admin") {
+    if (user?.role && Object.values(UserRole).includes(user.role)) {
       dispatch(loginSuccess({ email }));
       navigate("/");
       message.success("Login successful");

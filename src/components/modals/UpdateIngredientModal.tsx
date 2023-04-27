@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { TIngredient, TProperty } from "../../types";
+import { TIngredient } from "../../types";
 import { Input, Select, Space, Tag, message } from "antd";
 import { updateIngredient } from "../../redux/ingredientSlice";
 import ConfirmationModal from "./ConfirmationModal";
 
 type Props = {
-  id: string;
-  name: string;
-  properties: TProperty[];
+  record: TIngredient;
   callback?: () => any;
 };
 
 const UpdateIngredientModal = (props: Props) => {
   const allProperties = useSelector((state: RootState) => state.property);
 
-  const [ingredientName, setIngredientName] = useState(props.name);
-  const [selectedProperties, setSelectedProperties] = useState<string[]>(
-    props.properties.map((property) => property.name)
-  );
+  const [ingredientName, setIngredientName] = useState(props.record.name);
+  const [selectedProperties, setSelectedProperties] = useState<
+    Pick<TIngredient, "id">[]
+  >(props.record.properties);
 
   const dispatch = useDispatch();
 
@@ -28,19 +26,18 @@ const UpdateIngredientModal = (props: Props) => {
   };
 
   const handleSelectChange = (value: string[]) => {
-    setSelectedProperties(value);
+    const selectedProperties = allProperties.filter((prop) =>
+      value.includes(prop.name)
+    );
+    setSelectedProperties(selectedProperties);
   };
 
   const handleUpdateIngredient = () => {
     if (ingredientName.trim() !== "") {
       const updatedIngredient: TIngredient = {
-        id: props.id,
+        id: props.record.id,
         name: ingredientName,
-        properties: allProperties
-          .filter((prop) => selectedProperties.find((p) => p === prop.name))
-          .map((prop) => {
-            return { id: prop.id, name: prop.name };
-          }),
+        properties: selectedProperties,
       };
       dispatch(updateIngredient(updatedIngredient));
       message.success(
@@ -77,7 +74,13 @@ const UpdateIngredientModal = (props: Props) => {
       />
       <Select
         mode="multiple"
-        value={selectedProperties}
+        value={allProperties
+          .filter((prop) =>
+            selectedProperties
+              .map((selectedProp) => selectedProp.id)
+              .includes(prop.id)
+          )
+          .map((prop) => prop.name)}
         style={{ width: "100%" }}
         allowClear
         placeholder="Please select properties"

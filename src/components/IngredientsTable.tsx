@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { Table, Button, Tag, Space } from "antd";
@@ -12,9 +12,10 @@ import RemoveIngredientModal from "./modals/RemoveIngredientModal";
 
 export const IngredientsTable = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
-  const [recordToDelete, setRecordToDelete] = useState<string | undefined>(
+  const [recordToDelete, setRecordToDelete] = useState<TIngredient | undefined>(
     undefined
   );
   const [recordToUpdate, setRecordToUpdate] = useState<TIngredient | undefined>(
@@ -68,23 +69,32 @@ export const IngredientsTable = () => {
       }),
 
       onFilter: (value, record) =>
-        record.properties.some((property) =>
-          property.name.startsWith(value.toString())
+        record.properties.some((ingredientProperty) =>
+          properties
+            .find((property) => property.id === ingredientProperty.id)
+            ?.name.toLowerCase()
+            .includes(value.toString().toLowerCase())
         ),
       filterSearch: true,
-      render: (properties: TProperty[]) => (
+      render: (ingredientProperties: TProperty[]) => (
         <Space size="small" wrap>
-          {properties.map((property) => (
-            <Tag
-              color="blue"
-              bordered={false}
-              key={property.id}
-              style={{ cursor: "pointer" }}
-              onClick={handlePropertyClick}
-            >
-              {property.name}
-            </Tag>
-          ))}
+          {properties
+            .filter((property) =>
+              ingredientProperties
+                .map((property) => property.id)
+                .includes(property.id)
+            )
+            .map((property) => (
+              <Tag
+                color="blue"
+                bordered={false}
+                key={property.id}
+                style={{ cursor: "pointer" }}
+                onClick={handlePropertyClick}
+              >
+                {property.name}
+              </Tag>
+            ))}
         </Space>
       ),
     },
@@ -106,7 +116,7 @@ export const IngredientsTable = () => {
           >
             <EditTwoTone style={{ fontSize: 16 }} />
           </a>
-          <a onClick={() => setRecordToDelete(record.id)}>
+          <a onClick={() => setRecordToDelete(record)}>
             <DeleteTwoTone style={{ fontSize: 16 }} />
           </a>
         </Space>
@@ -117,13 +127,14 @@ export const IngredientsTable = () => {
   return (
     <>
       {recordToDelete && (
-        <RemoveIngredientModal id={recordToDelete} callback={handleDelete} />
+        <RemoveIngredientModal
+          record={recordToDelete}
+          callback={handleDelete}
+        />
       )}
       {recordToUpdate && (
         <UpdateIngredientModal
-          id={recordToUpdate.id}
-          name={recordToUpdate.name}
-          properties={recordToUpdate.properties}
+          record={recordToUpdate}
           callback={handleUpdate}
         />
       )}

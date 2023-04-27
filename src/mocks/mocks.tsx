@@ -1,4 +1,5 @@
 import { TUser } from "../types";
+import { UserRole } from "../types";
 import { TIngredient, TProperty } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,14 +9,14 @@ export const mockUserList: TUser[] = [
     name: "Admin",
     email: "admin@example.com",
     password: "admin",
-    role: "admin",
+    role: UserRole.admin,
   },
   {
     id: uuidv4(),
     name: "User",
     email: "user@example.com",
     password: "user",
-    role: "user",
+    role: UserRole.user,
   },
 ];
 
@@ -110,42 +111,52 @@ export const mockPropertiesList: TProperty[] = properties.map((property) => {
   };
 });
 
-const getPropertiesNames = (properties: string[]): TProperty[] => {
+const getPropertiesByName = (properties: string[]): TProperty[] => {
   return mockPropertiesList.filter((property) =>
     properties.includes(property.name)
   );
+};
+
+const getPropertyIdsByName = (
+  properties: string[]
+): Pick<TProperty, "id">[] => {
+  return mockPropertiesList
+    .filter((property) => properties.includes(property.name))
+    .map((property) => {
+      return { id: property.id };
+    });
 };
 
 export const ingredientDataMock: TIngredient[] = [
   {
     id: uuidv4(),
     name: "Shea Butter",
-    properties: getPropertiesNames(["Moisturizes", "Vegan"]),
+    properties: getPropertyIdsByName(["Moisturizes", "Vegan"]),
   },
   {
     id: uuidv4(),
     name: "Aloe Vera",
-    properties: getPropertiesNames(["Moisturizes", "Soothes", "Vegan"]),
+    properties: getPropertyIdsByName(["Moisturizes", "Soothes", "Vegan"]),
   },
   {
     id: uuidv4(),
     name: "Coconut Oil",
-    properties: getPropertiesNames(["Moisturizes", "Vegan"]),
+    properties: getPropertyIdsByName(["Moisturizes", "Vegan"]),
   },
   {
     id: uuidv4(),
     name: "Jojoba Oil",
-    properties: getPropertiesNames(["Moisturizes", "Vegan", "Cruelty-free"]),
+    properties: getPropertyIdsByName(["Moisturizes", "Vegan", "Cruelty-free"]),
   },
   {
     id: uuidv4(),
     name: "Hyaluronic Acid",
-    properties: getPropertiesNames(["Hydrates", "Vegan", "Cruelty-free"]),
+    properties: getPropertyIdsByName(["Hydrates", "Vegan", "Cruelty-free"]),
   },
   {
     id: uuidv4(),
     name: "Avocado Oil",
-    properties: getPropertiesNames([
+    properties: getPropertyIdsByName([
       "Moisturizes",
       "Anti-inflammatory",
       "Antioxidant",
@@ -154,12 +165,12 @@ export const ingredientDataMock: TIngredient[] = [
   {
     id: uuidv4(),
     name: "Rosewater",
-    properties: getPropertiesNames(["Hydrates", "Soothes", "Alcohol-free"]),
+    properties: getPropertyIdsByName(["Hydrates", "Soothes", "Alcohol-free"]),
   },
   {
     id: uuidv4(),
     name: "Argan Oil",
-    properties: getPropertiesNames([
+    properties: getPropertyIdsByName([
       "Moisturizes",
       "Antioxidant",
       "Anti-aging",
@@ -168,7 +179,7 @@ export const ingredientDataMock: TIngredient[] = [
   {
     id: uuidv4(),
     name: "Green Tea",
-    properties: getPropertiesNames([
+    properties: getPropertyIdsByName([
       "Antioxidant",
       "Anti-inflammatory",
       "Soothes",
@@ -177,6 +188,6 @@ export const ingredientDataMock: TIngredient[] = [
   {
     id: uuidv4(),
     name: "Cocoa Butter",
-    properties: getPropertiesNames(["Moisturizes", "Anti-aging", "Balances"]),
+    properties: getPropertyIdsByName(["Moisturizes", "Anti-aging", "Balances"]),
   },
 ];
