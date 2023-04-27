@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { Table, Button, Tag, Space } from "antd";
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import { RootState } from "../store/store";
+import { RootState } from "../redux/store";
 import { TIngredient, TProperty } from "../types";
 import AddIngredientModal from "./modals/AddIngredientModal";
 import UpdateIngredientModal from "./modals/UpdateIngredientModal";
@@ -89,9 +89,10 @@ export const IngredientsTable = () => {
       ),
     },
     {
-      title: "Actions",
-      key: "actions",
+      title: "Action",
+      key: "action",
       width: 120,
+      fixed: "right",
       render: (_, record) => (
         <Space size="middle">
           <a
@@ -140,7 +141,11 @@ export const IngredientsTable = () => {
           />
         )}
       </Space>
-      <Table<TIngredient> dataSource={ingredients} columns={columns} />
+      <Table<TIngredient>
+        scroll={{ x: 460 }}
+        dataSource={ingredients}
+        columns={columns}
+      />
     </>
   );
 };

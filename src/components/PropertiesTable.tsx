@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { Table, Tag, Button, Space } from "antd";
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import { RootState } from "../store/store";
+import { RootState } from "../redux/store";
 import { TProperty } from "types";
 import AddPropertyModal from "./modals/AddPropertyModal";
 import UpdatePropertyModal from "./modals/UpdatePropertyModal";
@@ -74,9 +74,10 @@ export const PropertiesTable = () => {
       dataIndex: "description",
     },
     {
-      title: "Actions",
-      dataIndex: "actions",
+      title: "Action",
+      dataIndex: "action",
       width: 120,
+      fixed: "right",
       render: (_, record) => (
         <Space size="middle">
           <a
@@ -123,7 +124,11 @@ export const PropertiesTable = () => {
           <AddPropertyModal callback={() => setShowAddPropertyModal(false)} />
         )}
       </Space>
-      <Table<TProperty> dataSource={properties} columns={columns}></Table>
+      <Table<TProperty>
+        dataSource={properties}
+        columns={columns}
+        scroll={{ x: 460 }}
+      ></Table>
     </>
   );
 };

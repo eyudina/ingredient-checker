@@ -9,3 +9,11 @@ export type TIngredient = {
   name: string;
   properties: TProperty[];
 };
+
+export type TUser = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: "user" | "admin";
+};

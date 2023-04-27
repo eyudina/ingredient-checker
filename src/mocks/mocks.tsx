@@ -1,5 +1,23 @@
+import { TUser } from "../types";
 import { TIngredient, TProperty } from "../types";
 import { v4 as uuidv4 } from "uuid";
+
+export const mockUserList: TUser[] = [
+  {
+    id: uuidv4(),
+    name: "Admin",
+    email: "admin@example.com",
+    password: "admin",
+    role: "admin",
+  },
+  {
+    id: uuidv4(),
+    name: "User",
+    email: "user@example.com",
+    password: "user",
+    role: "user",
+  },
+];
 
 export const properties: { name: string; description: string }[] = [
   {

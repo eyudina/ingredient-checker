@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
-import { removeProperty } from "../../store/propertySlice";
+import { removeProperty } from "../../redux/propertySlice";
 import ConfirmationModal from "./ConfirmationModal";
+import { message } from "antd";
 
 type Props = {
   id: string;
@@ -12,6 +13,7 @@ const RemovePropertyModal = (props: Props) => {
 
   const handleDelete = () => {
     dispatch(removeProperty({ id: props.id }));
+    message.success("Property removed successfully");
     props.callback && props.callback();
   };
 

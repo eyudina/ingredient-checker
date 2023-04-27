@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
-import { removeIngredient } from "../../store/ingredientSlice";
+import { removeIngredient } from "../../redux/ingredientSlice";
 import ConfirmationModal from "./ConfirmationModal";
+import { message } from "antd";
 
 type Props = {
   id: string;
@@ -12,6 +13,7 @@ const RemoveIngredientModal = (props: Props) => {
 
   const handleDelete = () => {
     dispatch(removeIngredient({ id: props.id }));
+    message.success("Ingredient removed successfully");
     props.callback && props.callback();
   };
 

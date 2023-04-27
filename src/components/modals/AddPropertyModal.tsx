@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProperty } from "../../store/propertySlice";
+import { addProperty } from "../../redux/propertySlice";
 import { TProperty } from "../../types";
-import { Input, Space } from "antd";
+import { Input, Space, Tag, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";
 
@@ -36,7 +36,10 @@ const AddPropertyModal = (props: Props) => {
         description: descriptionName,
       };
       dispatch(addProperty(newProperty));
+      message.success(`Property "${newProperty.name}" added successfully`);
       setPropertyName("");
+    } else {
+      message.error("Property name cannot be empty");
     }
     props.callback && props.callback();
   };

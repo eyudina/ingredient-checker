@@ -1,16 +1,14 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Grid, Layout, Menu, Avatar, Button, theme } from "antd";
+import { PageHeader } from "@ant-design/pro-components";
 import {
   ExperimentOutlined,
-  UserOutlined,
   LogoutOutlined,
   DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-
-import { PageHeader } from "@ant-design/pro-components";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -35,7 +33,7 @@ const items = [
     type: "item",
     label: "Logout",
     icon: <LogoutOutlined />,
-    path: "/logout",
+    path: "/login",
   },
 ];
 
@@ -66,9 +64,9 @@ export const AppLayout = () => {
         setPageTitle("Properties");
         setSelectedKey("properties");
         break;
-      case "/logout":
-        setPageTitle("Logout");
-        setSelectedKey("logout");
+      case "/login":
+        setPageTitle("");
+        setSelectedKey("login");
         break;
       default:
         setPageTitle("Ingredients");
@@ -86,7 +84,12 @@ export const AppLayout = () => {
         collapsed={collapsed}
       >
         <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Avatar size={48} icon={<UserOutlined />} />
+          <Avatar
+            style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
+            size={48}
+          >
+            A
+          </Avatar>
           <h3 style={{ marginTop: "10px" }}>Admin</h3>
         </div>
         <Menu theme="light" selectedKeys={[selectedKey]} mode="inline">
@@ -110,7 +113,7 @@ export const AppLayout = () => {
             }}
           />
         </Header>
-        <Content style={{ margin: "16px 16px 0" }}>
+        <Content style={{ position: "relative", margin: "16px 16px 0" }}>
           <PageHeader ghost={true} title={pageTitle} style={{ padding: 0 }} />
           <div style={{ marginTop: 16 }}>
             <Outlet />

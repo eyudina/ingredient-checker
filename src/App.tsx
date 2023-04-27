@@ -1,10 +1,10 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "store/store";
+import store from "redux/store";
+import LoginPage from "components/LoginPage";
 import AppLayout from "components/AppLayout";
 import { PropertiesTable } from "components/PropertiesTable";
-import { Logout } from "components/Logout";
 import { IngredientsTable } from "components/IngredientsTable";
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<IngredientsTable />} />
             <Route path="properties" element={<PropertiesTable />} />
-            <Route path="logout" element={<Logout />} />
+            <Route path="login" element={<LoginPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

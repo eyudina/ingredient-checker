@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "../../redux/store";
 import { TIngredient, TProperty } from "../../types";
-import { Input, Select, Space, Tag } from "antd";
-import { updateIngredient } from "../../store/ingredientSlice";
+import { Input, Select, Space, Tag, message } from "antd";
+import { updateIngredient } from "../../redux/ingredientSlice";
 import ConfirmationModal from "./ConfirmationModal";
 
 type Props = {
@@ -43,7 +43,12 @@ const UpdateIngredientModal = (props: Props) => {
           }),
       };
       dispatch(updateIngredient(updatedIngredient));
+      message.success(
+        `Ingredient "${updatedIngredient.name}" updated successfully`
+      );
       setIngredientName("");
+    } else {
+      message.error("Ingredient name cannot be empty");
     }
     props.callback && props.callback();
   };
