@@ -8,14 +8,14 @@ export const mockUserList: TUser[] = [
     id: uuidv4(),
     name: "Admin",
     email: "admin@example.com",
-    password: "admin",
+    password: "upSKIYM2iXqur9gm",
     role: UserRole.admin,
   },
   {
     id: uuidv4(),
     name: "User",
     email: "user@example.com",
-    password: "user",
+    password: "rgcQOIdN4p58Yknw",
     role: UserRole.user,
   },
 ];

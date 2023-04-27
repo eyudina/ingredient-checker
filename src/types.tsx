@@ -16,6 +16,16 @@ export enum UserRole {
   admin = "admin",
 }
 
+export enum Feature {
+  ingredientIndex = "ingredientIndex",
+  ingredientManagement = "ingredientManagement",
+}
+
+export const featuresByRole = {
+  [UserRole.admin]: [Feature.ingredientIndex, Feature.ingredientManagement],
+  [UserRole.user]: [Feature.ingredientIndex],
+};
+
 export type TUser = {
   id: string;
   name: string;

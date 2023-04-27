@@ -9,6 +9,10 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
+import { Feature } from "types";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import { userHasFeature } from "utils";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -20,6 +24,7 @@ const items = [
     label: "Ingredients",
     icon: <ExperimentOutlined />,
     path: "/",
+    requiredFeatures: [Feature.ingredientIndex],
   },
   {
     key: "properties",
@@ -27,15 +32,24 @@ const items = [
     label: "Properties",
     icon: <DatabaseOutlined />,
     path: "/properties",
+    requiredFeatures: [],
   },
   {
     key: "logout",
     type: "item",
-    label: "Logout",
+    label: "Log out",
     icon: <LogoutOutlined />,
-    path: "/login",
+    path: "/logout",
   },
 ];
+
+const loginMenuItem = {
+  key: "login",
+  type: "item",
+  label: "Log in",
+  icon: <LogoutOutlined />,
+  path: "/login",
+};
 
 export const AppLayout = () => {
   const screens = useBreakpoint();
@@ -45,6 +59,8 @@ export const AppLayout = () => {
   const [pageTitle, setPageTitle] = useState("Ingredients");
   const [selectedKey, setSelectedKey] = useState("/");
   const location = useLocation();
+
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const {
     token: { colorBgContainer },
@@ -93,11 +109,25 @@ export const AppLayout = () => {
           <h3 style={{ marginTop: "10px" }}>Admin</h3>
         </div>
         <Menu theme="light" selectedKeys={[selectedKey]} mode="inline">
-          {items.map((item) => (
-            <Menu.Item key={item.key} icon={item.icon}>
-              <Link to={item.path}>{item.label}</Link>
+          {currentUser &&
+            items
+              .filter(
+                (item) =>
+                  !item.requiredFeatures ||
+                  item.requiredFeatures.some((requiredFeature) =>
+                    userHasFeature(currentUser, requiredFeature)
+                  )
+              )
+              .map((item) => (
+                <Menu.Item key={item.key} icon={item.icon}>
+                  <Link to={item.path}>{item.label}</Link>
+                </Menu.Item>
+              ))}
+          {!currentUser && (
+            <Menu.Item key={loginMenuItem.key} icon={loginMenuItem.icon}>
+              <Link to={loginMenuItem.path}>{loginMenuItem.label}</Link>
             </Menu.Item>
-          ))}
+          )}
         </Menu>
       </Sider>
       <Layout>

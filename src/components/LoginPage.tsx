@@ -1,32 +1,56 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Card, Form, Input, Button, Tooltip, message } from "antd";
-import { InfoCircleTwoTone, UserOutlined } from "@ant-design/icons";
-import { TUser, UserRole } from "types";
-import { mockUserList } from "../mocks/mocks";
-import { loginFailure, loginSuccess } from "../redux/authSlice";
+import { Card, Form, Input, Button, Switch, message } from "antd";
+import { UserRole } from "types";
+import { loginSuccess } from "../redux/authSlice";
+import { RootState } from "redux/store";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string | undefined>(undefined);
-  const [password, setPassword] = useState<string | undefined>(undefined);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (values: TUser) => {
-    const user = mockUserList.find(
+  const { users } = useSelector((state: RootState) => state.auth);
+
+  const [isSwitchOn, setIsSwitchOn] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>(
+    isSwitchOn
+      ? users.find((user) => user.role === UserRole.admin)?.email || ""
+      : users.find((user) => user.role === UserRole.user)?.email || ""
+  );
+  const [password, setPassword] = useState<string>(
+    isSwitchOn
+      ? users.find((user) => user.role === UserRole.admin)?.password || ""
+      : users.find((user) => user.role === UserRole.user)?.password || ""
+  );
+
+  const handleSubmit = () => {
+    const user = users.find(
       (user) => user.email === email && user.password === password
     );
 
     if (user?.role && Object.values(UserRole).includes(user.role)) {
-      dispatch(loginSuccess({ email }));
+      dispatch(loginSuccess({ user }));
       navigate("/");
       message.success("Login successful");
     } else {
-      dispatch(loginFailure({ error: "Invalid email or password" }));
       message.error("Invalid email or password");
     }
+  };
+
+  const handleSwitchChange = (checked: boolean) => {
+    setIsSwitchOn(checked);
+
+    setEmail(
+      checked
+        ? users.find((user) => user.role === UserRole.admin)?.email || ""
+        : users.find((user) => user.role === UserRole.user)?.email || ""
+    );
+    setPassword(
+      checked
+        ? users.find((user) => user.role === UserRole.admin)?.password || ""
+        : users.find((user) => user.role === UserRole.user)?.password || ""
+    );
   };
 
   return (
@@ -43,43 +67,16 @@ const LoginPage = () => {
         <Card
           title="Login"
           extra={
-            <Tooltip
-              title={
-                <>
-                  <span style={{ fontWeight: 700 }}>Credentials</span>
-                  <br />
-                  <span style={{ color: "#b1b5b8" }}>
-                    =====================
-                  </span>
-                  <br />
-                  <UserOutlined style={{ marginRight: 8 }} />
-                  Admin
-                  <br />
-                  Email: {mockUserList[0].email}
-                  <br />
-                  Password: {mockUserList[0].password}
-                  <br />
-                  <span style={{ color: "#b1b5b8" }}>
-                    ----------------------------
-                  </span>
-                  <br />
-                  <UserOutlined style={{ marginRight: 8 }} />
-                  User
-                  <br />
-                  Email: {mockUserList[1].email}
-                  <br />
-                  User Password: {mockUserList[1].password}
-                  <br />
-                  <span style={{ color: "#b1b5b8" }}>
-                    ----------------------------
-                  </span>
-                </>
-              }
-            >
-              <InfoCircleTwoTone
-                style={{ marginLeft: 16, fontSize: 16, cursor: "pointer" }}
-              />
-            </Tooltip>
+            <span>
+              Fill in with &nbsp;
+              <Switch
+                checkedChildren={UserRole.admin}
+                unCheckedChildren={UserRole.user}
+                onChange={handleSwitchChange}
+                defaultChecked={isSwitchOn}
+              ></Switch>
+              &nbsp; credentials
+            </span>
           }
         >
           <Form
@@ -94,7 +91,6 @@ const LoginPage = () => {
           >
             <Form.Item
               label="Email"
-              name="email"
               rules={[{ required: true, message: "Please enter email" }]}
             >
               <Input
@@ -106,7 +102,6 @@ const LoginPage = () => {
             </Form.Item>
             <Form.Item
               label="Password"
-              name="password"
               rules={[{ required: true, message: "Please enter password" }]}
             >
               <Input.Password

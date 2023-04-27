@@ -1,17 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TUser } from "types";
+import { mockUserList } from "mocks/mocks";
 
 type TAuthState = {
-  isAuthenticated: boolean;
-  user: {
-    email: string;
-    role: TUser["role"];
-  } | null;
+  user: TUser | null;
+  users: TUser[];
 };
 
 const initialState: TAuthState = {
-  isAuthenticated: false,
   user: null,
+  users: mockUserList,
 };
 
 const authSlice = createSlice({
@@ -19,19 +17,13 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action: PayloadAction<any>) => {
-      state.isAuthenticated = true;
       state.user = action.payload.user;
     },
-    loginFailure: (state, action: PayloadAction<any>) => {
-      state.isAuthenticated = false;
-      state.user = null;
-    },
     logoutSuccess: (state, action: PayloadAction<any>) => {
-      state.isAuthenticated = false;
       state.user = null;
     },
   },
 });
 
-export const { loginSuccess, loginFailure, logoutSuccess } = authSlice.actions;
+export const { loginSuccess, logoutSuccess } = authSlice.actions;
 export default authSlice.reducer;
