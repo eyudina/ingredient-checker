@@ -32,8 +32,28 @@ export const IngredientsTable = () => {
   const ingredients = useSelector((state: RootState) => state.ingredient);
   const properties = useSelector((state: RootState) => state.property);
 
-  const [filteredIngredients, setFilteredIngredients] =
-    useState<TIngredient[]>(ingredients);
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+
+  const handlePropertySelect = (values: string[]) => {
+    setSelectedProperties(values);
+  };
+
+  const filteredData =
+    selectedProperties.length > 0
+      ? ingredients.filter((ingredient) =>
+          ingredient.properties.some((property) =>
+            selectedProperties.includes(
+              properties.find((p) => p.id === property.id)?.name || ""
+            )
+          )
+        )
+      : ingredients;
+
+  const options = properties.map((property) => ({
+    text: property.name,
+    value: property.name,
+    selected: selectedProperties.includes(property.name),
+  }));
 
   const handleDelete = () => {
     setRecordToDelete(undefined);
@@ -114,7 +134,7 @@ export const IngredientsTable = () => {
           key: "action",
           width: 120,
           fixed: "right",
-          render: (record) => (
+          render: (_, record) => (
             <Space size="middle">
               <a
                 onClick={() =>
@@ -135,26 +155,6 @@ export const IngredientsTable = () => {
         }
       : {},
   ];
-
-  const handlePropertySelect = (selectedProperties: string[]) => {
-    if (selectedProperties.length === 0) {
-      setFilteredIngredients(ingredients);
-    } else {
-      const filteredIngredients = ingredients.filter((ingredient) =>
-        ingredient.properties.some((property) =>
-          selectedProperties.includes(
-            properties.find((p) => p.id === property.id)?.name as string
-          )
-        )
-      );
-      setFilteredIngredients(filteredIngredients);
-    }
-  };
-
-  const options = properties.map((property) => ({
-    text: property.name,
-    value: property.name,
-  }));
 
   return (
     <div style={{ maxWidth: 1280 }}>
@@ -191,12 +191,6 @@ export const IngredientsTable = () => {
           <Select
             mode="multiple"
             allowClear
-            onClear={() => {
-              console.log(ingredients);
-              console.log(filteredIngredients);
-              setFilteredIngredients(ingredients);
-              console.log(filteredIngredients);
-            }}
             style={{ width: "100%" }}
             placeholder="Search for properties"
             onChange={handlePropertySelect}
@@ -207,7 +201,7 @@ export const IngredientsTable = () => {
       </Row>
       <Table<TIngredient>
         scroll={{ x: 460 }}
-        dataSource={filteredIngredients}
+        dataSource={filteredData}
         columns={columns}
       />
     </div>
