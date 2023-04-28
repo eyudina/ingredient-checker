@@ -11,6 +11,7 @@ import {
   GithubOutlined,
 } from "@ant-design/icons";
 import { useCurrentUser, useIsAdmin } from "./auth";
+import { UserRole } from "types";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -101,7 +102,9 @@ export const AppLayout = () => {
               }}
               size={48}
             >
-              {isAdmin ? "A" : "U"}
+              {isAdmin
+                ? UserRole.admin[0].toUpperCase()
+                : UserRole.user[0].toUpperCase()}
             </Avatar>
             <h3 style={{ marginTop: "10px" }}>{isAdmin ? "Admin" : "User"}</h3>
           </div>

@@ -74,6 +74,9 @@ const LoginPage = () => {
                 unCheckedChildren={UserRole.user}
                 onChange={handleSwitchChange}
                 defaultChecked={isSwitchOn}
+                style={{
+                  backgroundColor: isSwitchOn ? "#f56a00" : "#1890ff",
+                }}
               ></Switch>
               &nbsp; credentials
             </span>
