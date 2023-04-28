@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Grid, Layout, Menu, Avatar, Button, theme } from "antd";
+import { Grid, Layout, Menu, Avatar, Button, Space, theme } from "antd";
 import { PageHeader } from "@ant-design/pro-components";
 import {
   ExperimentOutlined,
@@ -8,6 +8,7 @@ import {
   DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  GithubOutlined,
 } from "@ant-design/icons";
 import { useCurrentUser, useIsAdmin } from "./auth";
 
@@ -115,19 +116,48 @@ export const AppLayout = () => {
         </Sider>
       )}
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          {currentUser && showSidebar && (
+        <Header
+          style={{
+            padding: "0 16px",
+            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            {currentUser && showSidebar && (
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: 16,
+                  width: 64,
+                  height: 64,
+                }}
+              />
+            )}
             <Button
               type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
+              icon={<GithubOutlined />}
+              href="https://github.com/eyudina/ingredient-checker"
+              target="_blank"
               style={{
-                fontSize: "16px",
+                fontSize: 18,
                 width: 64,
                 height: 64,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
-          )}
+            ></Button>
+          </div>
         </Header>
         <Content style={{ position: "relative", margin: "16px 16px 0" }}>
           <PageHeader ghost={true} title={pageTitle} style={{ padding: 0 }} />
