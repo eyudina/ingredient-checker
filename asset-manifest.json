@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ingredient-checker/static/css/main.b141e5ae.css",
-    "main.js": "/ingredient-checker/static/js/main.47b2daa9.js",
+    "main.js": "/ingredient-checker/static/js/main.9c140d98.js",
     "static/js/787.85eed3f5.chunk.js": "/ingredient-checker/static/js/787.85eed3f5.chunk.js",
     "index.html": "/ingredient-checker/index.html",
     "main.b141e5ae.css.map": "/ingredient-checker/static/css/main.b141e5ae.css.map",
-    "main.47b2daa9.js.map": "/ingredient-checker/static/js/main.47b2daa9.js.map",
+    "main.9c140d98.js.map": "/ingredient-checker/static/js/main.9c140d98.js.map",
     "787.85eed3f5.chunk.js.map": "/ingredient-checker/static/js/787.85eed3f5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b141e5ae.css",
-    "static/js/main.47b2daa9.js"
+    "static/js/main.9c140d98.js"
   ]
 }
