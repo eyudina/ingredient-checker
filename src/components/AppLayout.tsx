@@ -9,10 +9,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import { Feature } from "types";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/store";
-import { userHasFeature } from "utils";
+import { useCurrentUser, useIsAdmin } from "./auth";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -24,7 +21,6 @@ const items = [
     label: "Ingredients",
     icon: <ExperimentOutlined />,
     path: "/",
-    requiredFeatures: [Feature.ingredientIndex],
   },
   {
     key: "properties",
@@ -32,24 +28,15 @@ const items = [
     label: "Properties",
     icon: <DatabaseOutlined />,
     path: "/properties",
-    requiredFeatures: [],
   },
   {
     key: "logout",
     type: "item",
     label: "Log out",
     icon: <LogoutOutlined />,
-    path: "/logout",
+    path: "/login",
   },
 ];
-
-const loginMenuItem = {
-  key: "login",
-  type: "item",
-  label: "Log in",
-  icon: <LogoutOutlined />,
-  path: "/login",
-};
 
 export const AppLayout = () => {
   const screens = useBreakpoint();
@@ -58,9 +45,11 @@ export const AppLayout = () => {
   const [collapsed, setCollapsed] = useState(isMobile);
   const [pageTitle, setPageTitle] = useState("Ingredients");
   const [selectedKey, setSelectedKey] = useState("/");
+  const [showSidebar, setShowSidebar] = useState(true);
   const location = useLocation();
 
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUser = useCurrentUser();
+  const isAdmin = useIsAdmin();
 
   const {
     token: { colorBgContainer },
@@ -75,6 +64,7 @@ export const AppLayout = () => {
       case "/":
         setPageTitle("Ingredients");
         setSelectedKey("ingredients");
+        setShowSidebar(true);
         break;
       case "/properties":
         setPageTitle("Properties");
@@ -82,66 +72,62 @@ export const AppLayout = () => {
         break;
       case "/login":
         setPageTitle("");
-        setSelectedKey("login");
+        setSelectedKey("logout");
+        setShowSidebar(false);
         break;
       default:
         setPageTitle("Ingredients");
         setSelectedKey("ingredients");
+        setShowSidebar(true);
     }
   }, [location]);
 
   return (
     <Layout style={{ height: "auto", minHeight: "100vh" }}>
-      <Sider
-        width="200"
-        theme="light"
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-      >
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Avatar
-            style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
-            size={48}
-          >
-            A
-          </Avatar>
-          <h3 style={{ marginTop: "10px" }}>Admin</h3>
-        </div>
-        <Menu theme="light" selectedKeys={[selectedKey]} mode="inline">
-          {currentUser &&
-            items
-              .filter(
-                (item) =>
-                  !item.requiredFeatures ||
-                  item.requiredFeatures.some((requiredFeature) =>
-                    userHasFeature(currentUser, requiredFeature)
-                  )
-              )
-              .map((item) => (
+      {currentUser && showSidebar && (
+        <Sider
+          width="200"
+          theme="light"
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+        >
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <Avatar
+              style={{
+                backgroundColor: isAdmin ? "#fde3cf" : "#e6f4ff",
+                color: isAdmin ? "#f56a00" : "#1890ff",
+              }}
+              size={48}
+            >
+              {isAdmin ? "A" : "U"}
+            </Avatar>
+            <h3 style={{ marginTop: "10px" }}>{isAdmin ? "Admin" : "User"}</h3>
+          </div>
+          <Menu theme="light" selectedKeys={[selectedKey]} mode="inline">
+            {currentUser &&
+              items.map((item) => (
                 <Menu.Item key={item.key} icon={item.icon}>
                   <Link to={item.path}>{item.label}</Link>
                 </Menu.Item>
               ))}
-          {!currentUser && (
-            <Menu.Item key={loginMenuItem.key} icon={loginMenuItem.icon}>
-              <Link to={loginMenuItem.path}>{loginMenuItem.label}</Link>
-            </Menu.Item>
-          )}
-        </Menu>
-      </Sider>
+          </Menu>
+        </Sider>
+      )}
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
+          {currentUser && showSidebar && (
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
+            />
+          )}
         </Header>
         <Content style={{ position: "relative", margin: "16px 16px 0" }}>
           <PageHeader ghost={true} title={pageTitle} style={{ padding: 0 }} />

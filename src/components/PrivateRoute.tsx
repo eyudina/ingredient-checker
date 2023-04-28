@@ -1,21 +1,19 @@
-import { TUser, UserRole } from "../types";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Navigate } from "react-router-dom";
 
-type Props = {
-  role: UserRole;
-  component: React.Component;
-};
+interface PrivateRouteProps {
+  element: JSX.Element;
+}
 
-const PrivateRoute = (props: Props) => {
-  const user = useSelector((state: RootState) => state.auth.user);
+const PrivateRoute = ({ element }: PrivateRouteProps) => {
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (!user || user.role !== props.role) {
-    return <Navigate to="/login" />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
-  return <div></div>;
+  return element;
 };
 
 export default PrivateRoute;

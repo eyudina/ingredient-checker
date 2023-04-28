@@ -6,8 +6,7 @@ import LoginPage from "components/LoginPage";
 import AppLayout from "components/AppLayout";
 import { PropertiesTable } from "components/PropertiesTable";
 import { IngredientsTable } from "components/IngredientsTable";
-import { userHasFeature } from "utils";
-import { Feature } from "types";
+import PrivateRoute from "components/PrivateRoute";
 
 const App = () => {
   const currentUser = store.getState().auth.user;
@@ -17,8 +16,18 @@ const App = () => {
       <BrowserRouter basename="/ingredient-checker">
         <Routes>
           <Route path="/" element={<AppLayout />}>
-            <Route index element={<IngredientsTable />} />
-            <Route path="properties" element={<PropertiesTable />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute element={<IngredientsTable />}></PrivateRoute>
+              }
+            />
+            <Route
+              path="properties"
+              element={
+                <PrivateRoute element={<PropertiesTable />}></PrivateRoute>
+              }
+            />
             <Route path="login" element={<LoginPage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Route>

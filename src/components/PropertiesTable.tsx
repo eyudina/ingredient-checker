@@ -9,9 +9,12 @@ import { TProperty } from "types";
 import AddPropertyModal from "./modals/AddPropertyModal";
 import UpdatePropertyModal from "./modals/UpdatePropertyModal";
 import RemovePropertyModal from "./modals/RemovePropertyModal";
+import { useIsAdmin } from "./auth";
 
 export const PropertiesTable = () => {
   const location = useLocation();
+
+  const isAdmin = useIsAdmin();
 
   const [showAddPropertyModal, setShowAddPropertyModal] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<string | undefined>(
@@ -73,30 +76,32 @@ export const PropertiesTable = () => {
       title: "Description",
       dataIndex: "description",
     },
-    {
-      title: "Action",
-      dataIndex: "action",
-      width: 120,
-      fixed: "right",
-      render: (_, record) => (
-        <Space size="middle">
-          <a
-            onClick={() =>
-              setRecordToUpdate({
-                id: record.id,
-                name: record.name,
-                description: record.description,
-              })
-            }
-          >
-            <EditTwoTone style={{ fontSize: 16 }} />
-          </a>
-          <a onClick={() => setRecordToDelete(record.id)}>
-            <DeleteTwoTone style={{ fontSize: 16 }} />
-          </a>
-        </Space>
-      ),
-    },
+    isAdmin
+      ? {
+          title: "Action",
+          dataIndex: "action",
+          width: 120,
+          fixed: "right",
+          render: (_, record) => (
+            <Space size="middle">
+              <a
+                onClick={() =>
+                  setRecordToUpdate({
+                    id: record.id,
+                    name: record.name,
+                    description: record.description,
+                  })
+                }
+              >
+                <EditTwoTone style={{ fontSize: 16 }} />
+              </a>
+              <a onClick={() => setRecordToDelete(record.id)}>
+                <DeleteTwoTone style={{ fontSize: 16 }} />
+              </a>
+            </Space>
+          ),
+        }
+      : {},
   ];
 
   return (
@@ -112,18 +117,20 @@ export const PropertiesTable = () => {
           callback={handleUpdate}
         />
       )}
-      <Space style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => setShowAddPropertyModal(true)}
-        >
-          Add Property
-        </Button>
-        {showAddPropertyModal && (
-          <AddPropertyModal callback={() => setShowAddPropertyModal(false)} />
-        )}
-      </Space>
+      {isAdmin && (
+        <Space style={{ marginBottom: 16 }}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setShowAddPropertyModal(true)}
+          >
+            Add Property
+          </Button>
+          {showAddPropertyModal && (
+            <AddPropertyModal callback={() => setShowAddPropertyModal(false)} />
+          )}
+        </Space>
+      )}
       <Table<TProperty>
         dataSource={properties}
         columns={columns}

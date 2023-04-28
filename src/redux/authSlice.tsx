@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TUser } from "types";
+import { TUser, UserRole } from "types";
 import { mockUserList } from "mocks/mocks";
 
 type TAuthState = {
   user: TUser | null;
-  users: TUser[];
+  isAdmin: boolean;
+  userList: TUser[];
 };
 
 const initialState: TAuthState = {
   user: null,
-  users: mockUserList,
+  isAdmin: false,
+  userList: mockUserList,
 };
 
 const authSlice = createSlice({
@@ -18,6 +20,7 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess: (state, action: PayloadAction<any>) => {
       state.user = action.payload.user;
+      state.isAdmin = action.payload?.role === UserRole.admin;
     },
     logoutSuccess: (state, action: PayloadAction<any>) => {
       state.user = null;

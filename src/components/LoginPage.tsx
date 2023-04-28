@@ -10,22 +10,22 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { users } = useSelector((state: RootState) => state.auth);
+  const { userList } = useSelector((state: RootState) => state.auth);
 
   const [isSwitchOn, setIsSwitchOn] = useState<boolean>(true);
   const [email, setEmail] = useState<string>(
     isSwitchOn
-      ? users.find((user) => user.role === UserRole.admin)?.email || ""
-      : users.find((user) => user.role === UserRole.user)?.email || ""
+      ? userList.find((user) => user.role === UserRole.admin)?.email || ""
+      : userList.find((user) => user.role === UserRole.user)?.email || ""
   );
   const [password, setPassword] = useState<string>(
     isSwitchOn
-      ? users.find((user) => user.role === UserRole.admin)?.password || ""
-      : users.find((user) => user.role === UserRole.user)?.password || ""
+      ? userList.find((user) => user.role === UserRole.admin)?.password || ""
+      : userList.find((user) => user.role === UserRole.user)?.password || ""
   );
 
   const handleSubmit = () => {
-    const user = users.find(
+    const user = userList.find(
       (user) => user.email === email && user.password === password
     );
 
@@ -43,13 +43,13 @@ const LoginPage = () => {
 
     setEmail(
       checked
-        ? users.find((user) => user.role === UserRole.admin)?.email || ""
-        : users.find((user) => user.role === UserRole.user)?.email || ""
+        ? userList.find((user) => user.role === UserRole.admin)?.email || ""
+        : userList.find((user) => user.role === UserRole.user)?.email || ""
     );
     setPassword(
       checked
-        ? users.find((user) => user.role === UserRole.admin)?.password || ""
-        : users.find((user) => user.role === UserRole.user)?.password || ""
+        ? userList.find((user) => user.role === UserRole.admin)?.password || ""
+        : userList.find((user) => user.role === UserRole.user)?.password || ""
     );
   };
 

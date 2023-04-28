@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProperty } from "../../redux/propertySlice";
 import { TProperty } from "../../types";
-import { Input, Space, Tag, message } from "antd";
+import { Input, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";
 

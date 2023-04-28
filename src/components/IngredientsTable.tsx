@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { Table, Button, Tag, Space } from "antd";
@@ -9,10 +9,12 @@ import { TIngredient, TProperty } from "../types";
 import AddIngredientModal from "./modals/AddIngredientModal";
 import UpdateIngredientModal from "./modals/UpdateIngredientModal";
 import RemoveIngredientModal from "./modals/RemoveIngredientModal";
+import { useIsAdmin } from "./auth";
 
 export const IngredientsTable = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const isAdmin = useIsAdmin();
 
   const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<TIngredient | undefined>(
@@ -98,30 +100,32 @@ export const IngredientsTable = () => {
         </Space>
       ),
     },
-    {
-      title: "Action",
-      key: "action",
-      width: 120,
-      fixed: "right",
-      render: (_, record) => (
-        <Space size="middle">
-          <a
-            onClick={() =>
-              setRecordToUpdate({
-                id: record.id,
-                name: record.name,
-                properties: record.properties,
-              })
-            }
-          >
-            <EditTwoTone style={{ fontSize: 16 }} />
-          </a>
-          <a onClick={() => setRecordToDelete(record)}>
-            <DeleteTwoTone style={{ fontSize: 16 }} />
-          </a>
-        </Space>
-      ),
-    },
+    isAdmin
+      ? {
+          title: "Action",
+          key: "action",
+          width: 120,
+          fixed: "right",
+          render: (_, record) => (
+            <Space size="middle">
+              <a
+                onClick={() =>
+                  setRecordToUpdate({
+                    id: record.id,
+                    name: record.name,
+                    properties: record.properties,
+                  })
+                }
+              >
+                <EditTwoTone style={{ fontSize: 16 }} />
+              </a>
+              <a onClick={() => setRecordToDelete(record)}>
+                <DeleteTwoTone style={{ fontSize: 16 }} />
+              </a>
+            </Space>
+          ),
+        }
+      : {},
   ];
 
   return (
@@ -138,20 +142,23 @@ export const IngredientsTable = () => {
           callback={handleUpdate}
         />
       )}
-      <Space style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => setShowAddIngredientModal(true)}
-        >
-          Add Ingredient
-        </Button>
-        {showAddIngredientModal && (
-          <AddIngredientModal
-            callback={() => setShowAddIngredientModal(false)}
-          />
-        )}
-      </Space>
+      {isAdmin && (
+        <Space style={{ marginBottom: 16 }}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setShowAddIngredientModal(true)}
+          >
+            Add Ingredient
+          </Button>
+
+          {showAddIngredientModal && (
+            <AddIngredientModal
+              callback={() => setShowAddIngredientModal(false)}
+            />
+          )}
+        </Space>
+      )}
       <Table<TIngredient>
         scroll={{ x: 460 }}
         dataSource={ingredients}
