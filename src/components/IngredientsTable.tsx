@@ -91,20 +91,6 @@ export const IngredientsTable = () => {
     {
       title: "Properties",
       dataIndex: "properties",
-      filters: properties.map((property) => {
-        return {
-          text: property.name,
-          value: property.name,
-        };
-      }),
-
-      onFilter: (value, record) =>
-        record.properties.some((ingredientProperty) =>
-          properties
-            .find((property) => property.id === ingredientProperty.id)
-            ?.name.toLowerCase()
-            .includes(value.toString().toLowerCase())
-        ),
       filterSearch: true,
       render: (ingredientProperties: TProperty[]) => (
         <Space size="small" wrap>
