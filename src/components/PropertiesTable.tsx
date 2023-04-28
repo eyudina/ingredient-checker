@@ -82,7 +82,7 @@ export const PropertiesTable = () => {
           dataIndex: "action",
           width: 120,
           fixed: "right",
-          render: (record) => (
+          render: (_, record) => (
             <Space size="middle">
               <a
                 onClick={() =>
