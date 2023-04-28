@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
-import { Table, Button, Tag, Space } from "antd";
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
+import { Table, Button, Tag, Space, Select, Row, Col } from "antd";
+import {
+  DeleteTwoTone,
+  EditTwoTone,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { RootState } from "../redux/store";
 import { TIngredient, TProperty } from "../types";
 import AddIngredientModal from "./modals/AddIngredientModal";
@@ -26,6 +31,9 @@ export const IngredientsTable = () => {
 
   const ingredients = useSelector((state: RootState) => state.ingredient);
   const properties = useSelector((state: RootState) => state.property);
+
+  const [filteredIngredients, setFilteredIngredients] =
+    useState<TIngredient[]>(ingredients);
 
   const handleDelete = () => {
     setRecordToDelete(undefined);
@@ -106,7 +114,7 @@ export const IngredientsTable = () => {
           key: "action",
           width: 120,
           fixed: "right",
-          render: (_, record) => (
+          render: (record) => (
             <Space size="middle">
               <a
                 onClick={() =>
@@ -128,8 +136,28 @@ export const IngredientsTable = () => {
       : {},
   ];
 
+  const handlePropertySelect = (selectedProperties: string[]) => {
+    if (selectedProperties.length === 0) {
+      setFilteredIngredients(ingredients);
+    } else {
+      const filteredIngredients = ingredients.filter((ingredient) =>
+        ingredient.properties.some((property) =>
+          selectedProperties.includes(
+            properties.find((p) => p.id === property.id)?.name as string
+          )
+        )
+      );
+      setFilteredIngredients(filteredIngredients);
+    }
+  };
+
+  const options = properties.map((property) => ({
+    text: property.name,
+    value: property.name,
+  }));
+
   return (
-    <>
+    <div style={{ maxWidth: 1280 }}>
       {recordToDelete && (
         <RemoveIngredientModal
           record={recordToDelete}
@@ -142,28 +170,46 @@ export const IngredientsTable = () => {
           callback={handleUpdate}
         />
       )}
-      {isAdmin && (
-        <Space style={{ marginBottom: 16 }}>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => setShowAddIngredientModal(true)}
-          >
-            Add Ingredient
-          </Button>
-
-          {showAddIngredientModal && (
-            <AddIngredientModal
-              callback={() => setShowAddIngredientModal(false)}
-            />
-          )}
-        </Space>
-      )}
+      <Row gutter={[16, 16]} style={{ paddingBottom: 16 }}>
+        {isAdmin && (
+          <Col flex={"none"}>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setShowAddIngredientModal(true)}
+            >
+              Add Ingredient
+            </Button>
+            {showAddIngredientModal && (
+              <AddIngredientModal
+                callback={() => setShowAddIngredientModal(false)}
+              />
+            )}
+          </Col>
+        )}
+        <Col flex={"auto"}>
+          <Select
+            mode="multiple"
+            allowClear
+            onClear={() => {
+              console.log(ingredients);
+              console.log(filteredIngredients);
+              setFilteredIngredients(ingredients);
+              console.log(filteredIngredients);
+            }}
+            style={{ width: "100%" }}
+            placeholder="Search for properties"
+            onChange={handlePropertySelect}
+            options={options}
+            suffixIcon={<SearchOutlined />}
+          />
+        </Col>
+      </Row>
       <Table<TIngredient>
         scroll={{ x: 460 }}
-        dataSource={ingredients}
+        dataSource={filteredIngredients}
         columns={columns}
       />
-    </>
+    </div>
   );
 };

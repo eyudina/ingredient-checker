@@ -82,7 +82,7 @@ export const PropertiesTable = () => {
           dataIndex: "action",
           width: 120,
           fixed: "right",
-          render: (_, record) => (
+          render: (record) => (
             <Space size="middle">
               <a
                 onClick={() =>
@@ -105,7 +105,7 @@ export const PropertiesTable = () => {
   ];
 
   return (
-    <>
+    <div style={{ maxWidth: 1280 }}>
       {recordToDelete && (
         <RemovePropertyModal id={recordToDelete} callback={handleDelete} />
       )}
@@ -136,6 +136,6 @@ export const PropertiesTable = () => {
         columns={columns}
         scroll={{ x: 460 }}
       ></Table>
-    </>
+    </div>
   );
 };

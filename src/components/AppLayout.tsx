@@ -159,7 +159,11 @@ export const AppLayout = () => {
             ></Button>
           </div>
         </Header>
-        <Content style={{ position: "relative", margin: "16px 16px 0" }}>
+        <Content
+          style={{
+            margin: "24px 32px 0",
+          }}
+        >
           <PageHeader ghost={true} title={pageTitle} style={{ padding: 0 }} />
           <div style={{ marginTop: 16 }}>
             <Outlet />
