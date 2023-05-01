@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProperty } from "../../redux/propertySlice";
-import { TProperty } from "../../types";
+import { TProperty } from "../../types/types";
 import { Input, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";

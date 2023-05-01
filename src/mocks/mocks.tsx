@@ -1,6 +1,6 @@
-import { TUser } from "../types";
-import { UserRole } from "../types";
-import { TIngredient, TProperty } from "../types";
+import { TUser } from "../types/types";
+import { UserRole } from "../types/types";
+import { TIngredient, TProperty } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
 
 export const mockUserList: TUser[] = [
@@ -20,7 +20,7 @@ export const mockUserList: TUser[] = [
   },
 ];
 
-export const properties: { name: string; description: string }[] = [
+const properties: { name: string; description: string }[] = [
   {
     name: "Moisturizes",
     description:
@@ -110,12 +110,6 @@ export const mockPropertiesList: TProperty[] = properties.map((property) => {
     description: property.description,
   };
 });
-
-const getPropertiesByName = (properties: string[]): TProperty[] => {
-  return mockPropertiesList.filter((property) =>
-    properties.includes(property.name)
-  );
-};
 
 const getPropertyIdsByName = (
   properties: string[]

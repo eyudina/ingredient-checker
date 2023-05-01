@@ -6,7 +6,7 @@ import LoginPage from "components/LoginPage";
 import AppLayout from "components/AppLayout";
 import { PropertiesTable } from "components/PropertiesTable";
 import { IngredientsTable } from "components/IngredientsTable";
-import PrivateRoute from "components/PrivateRoute";
+import PrivateRoute from "routes/PrivateRoute";
 
 const App = () => {
   const currentUser = store.getState().auth.user;

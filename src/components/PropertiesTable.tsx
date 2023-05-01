@@ -5,16 +5,16 @@ import { ColumnsType } from "antd/lib/table";
 import { Table, Tag, Button, Space } from "antd";
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
 import { RootState } from "../redux/store";
-import { TProperty } from "types";
+import { TProperty } from "types/types";
 import AddPropertyModal from "./modals/AddPropertyModal";
 import UpdatePropertyModal from "./modals/UpdatePropertyModal";
 import RemovePropertyModal from "./modals/RemovePropertyModal";
-import { useIsAdmin } from "./auth";
+import { IsAdmin } from "./AuthUtils";
 
 export const PropertiesTable = () => {
   const location = useLocation();
 
-  const isAdmin = useIsAdmin();
+  const isAdmin = IsAdmin();
 
   const [showAddPropertyModal, setShowAddPropertyModal] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<string | undefined>(

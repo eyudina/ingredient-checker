@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TUser, UserRole } from "types";
+import { TUser, UserRole } from "types/types";
 import { mockUserList } from "mocks/mocks";
 
 type TAuthState = {

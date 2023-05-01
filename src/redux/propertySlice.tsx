@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TProperty } from "types";
+import { TProperty } from "types/types";
 import { mockPropertiesList } from "mocks/mocks";
 
 const initialState: TProperty[] = mockPropertiesList;

@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { removeIngredient } from "../../redux/ingredientSlice";
 import ConfirmationModal from "./ConfirmationModal";
 import { message } from "antd";
-import { TIngredient } from "types";
+import { TIngredient } from "types/types";
 
 type Props = {
   record: TIngredient;

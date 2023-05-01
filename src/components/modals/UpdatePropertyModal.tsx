@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { TProperty } from "../../types";
+import { TProperty } from "../../types/types";
 import { Input, Space, message } from "antd";
 import { updateProperty } from "../../redux/propertySlice";
 import ConfirmationModal from "./ConfirmationModal";

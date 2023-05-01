@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { TIngredient } from "../../types";
+import { TIngredient } from "../../types/types";
 import { Input, Select, Space, Tag, message } from "antd";
 import { updateIngredient } from "../../redux/ingredientSlice";
 import ConfirmationModal from "./ConfirmationModal";

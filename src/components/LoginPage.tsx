@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Card, Form, Input, Button, Switch, message } from "antd";
-import { UserRole } from "types";
+import { Grid, Card, Form, Input, Button, Switch, message } from "antd";
+import { UserRole } from "types/types";
 import { loginSuccess } from "../redux/authSlice";
 import { RootState } from "redux/store";
+
+const { useBreakpoint } = Grid;
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const screens = useBreakpoint();
+  const isMobile = screens.xs;
 
   const { userList } = useSelector((state: RootState) => state.auth);
 
@@ -58,16 +63,14 @@ const LoginPage = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "auto",
-          minHeight: "100vh",
+          justifyContent: "center",
         }}
       >
         <Card
           title="Login"
+          style={{ minWidth: isMobile ? "100%" : 420 }}
           extra={
-            <span>
+            <span style={{ marginLeft: 8, whiteSpace: "nowrap" }}>
               Fill in with &nbsp;
               <Switch
                 checkedChildren={UserRole.admin}
@@ -84,7 +87,7 @@ const LoginPage = () => {
         >
           <Form
             name="login"
-            style={{ maxWidth: 600, minWidth: 420 }}
+            style={{ maxWidth: 600 }}
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             initialValues={{ remember: true }}

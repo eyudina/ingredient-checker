@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TIngredient } from "types";
+import { TIngredient } from "types/types";
 import { ingredientDataMock } from "mocks/mocks";
 
 const initialState: TIngredient[] = ingredientDataMock;

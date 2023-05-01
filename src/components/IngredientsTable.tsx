@@ -10,16 +10,16 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { RootState } from "../redux/store";
-import { TIngredient, TProperty } from "../types";
+import { TIngredient, TProperty } from "../types/types";
 import AddIngredientModal from "./modals/AddIngredientModal";
 import UpdateIngredientModal from "./modals/UpdateIngredientModal";
 import RemoveIngredientModal from "./modals/RemoveIngredientModal";
-import { useIsAdmin } from "./auth";
+import { IsAdmin } from "./AuthUtils";
 
 export const IngredientsTable = () => {
   const navigate = useNavigate();
 
-  const isAdmin = useIsAdmin();
+  const isAdmin = IsAdmin();
 
   const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<TIngredient | undefined>(

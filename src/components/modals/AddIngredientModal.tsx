@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { addIngredient } from "../../redux/ingredientSlice";
-import { TIngredient } from "../../types";
+import { TIngredient } from "../../types/types";
 import { Input, Select, Space, message } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";

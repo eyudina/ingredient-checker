@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Grid, Layout, Menu, Avatar, Button, Space, theme } from "antd";
+import { Grid, Layout, Menu, Avatar, Button, theme } from "antd";
 import { PageHeader } from "@ant-design/pro-components";
 import {
   ExperimentOutlined,
@@ -10,12 +10,11 @@ import {
   MenuUnfoldOutlined,
   GithubOutlined,
 } from "@ant-design/icons";
-import { useCurrentUser, useIsAdmin } from "./auth";
-import { UserRole } from "types";
+import { useCurrentUser, IsAdmin } from "./AuthUtils";
+import { UserRole } from "types/types";
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
-
 const items = [
   {
     key: "ingredients",
@@ -40,22 +39,23 @@ const items = [
   },
 ];
 
-export const AppLayout = () => {
+const AppLayout = () => {
   const screens = useBreakpoint();
   const isMobile = screens.xs;
-
-  const [collapsed, setCollapsed] = useState(isMobile);
-  const [pageTitle, setPageTitle] = useState("Ingredients");
-  const [selectedKey, setSelectedKey] = useState("/");
-  const [showSidebar, setShowSidebar] = useState(true);
-  const location = useLocation();
-
-  const currentUser = useCurrentUser();
-  const isAdmin = useIsAdmin();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const location = useLocation();
+
+  const currentUser = useCurrentUser();
+  const isAdmin = IsAdmin();
+
+  const [collapsed, setCollapsed] = useState(isMobile);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [pageTitle, setPageTitle] = useState("Ingredients");
+  const [selectedKey, setSelectedKey] = useState("/");
 
   useEffect(() => {
     setCollapsed(isMobile);
@@ -165,9 +165,10 @@ export const AppLayout = () => {
         <Content
           style={{
             margin: "24px 32px 0",
+            position: "relative",
           }}
         >
-          <PageHeader ghost={true} title={pageTitle} style={{ padding: 0 }} />
+          <PageHeader title={pageTitle} style={{ padding: 0 }} />
           <div style={{ marginTop: 16 }}>
             <Outlet />
           </div>
