@@ -2,6 +2,7 @@ import { RootState } from "redux/store";
 import { useSelector } from "react-redux";
 import { UserRole } from "types/types";
 
+// Hooks for authentication
 export const useCurrentUser = () => {
   return useSelector((state: RootState) => state.auth.user);
 };

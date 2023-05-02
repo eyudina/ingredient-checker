@@ -4,6 +4,7 @@ import { TProperty } from "../../types/types";
 import { Input, Space, message } from "antd";
 import { updateProperty } from "../../redux/propertySlice";
 import ConfirmationModal from "./ConfirmationModal";
+
 const { TextArea } = Input;
 
 type Props = {
@@ -19,17 +20,21 @@ const UpdatePropertyModal = (props: Props) => {
 
   const dispatch = useDispatch();
 
+  // Set the property name to the value of the input field
   const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPropertyName(e.target.value);
   };
 
+  // Set the description to the value of the textarea field
   const handleDescriptionInputChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setDescriptionName(e.target.value);
   };
 
+  // Update the property
   const handleUpdateProperty = () => {
+    // If the property name is not empty, create a new property object and dispatch the updateProperty action
     if (propertyName.trim() !== "") {
       const updatedProperty: TProperty = {
         id: props.id,
@@ -45,7 +50,7 @@ const UpdatePropertyModal = (props: Props) => {
     } else {
       message.error("Property name cannot be empty");
     }
-    props.callback && props.callback();
+    props.callback?.();
   };
 
   const modalContent = (
@@ -68,7 +73,7 @@ const UpdatePropertyModal = (props: Props) => {
       title="Update Property"
       onConfirm={handleUpdateProperty}
       okText="Update"
-      onCancel={() => props.callback && props.callback()}
+      onCancel={() => props.callback?.()}
     >
       {modalContent}
     </ConfirmationModal>

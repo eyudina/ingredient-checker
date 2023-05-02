@@ -12,7 +12,7 @@ type Props = {
 
 const ConfirmationModal = (props: Props) => {
   const handleCancel = () => {
-    props.onCancel && props.onCancel();
+    props.onCancel?.();
   };
 
   const handleOk = () => {

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
+import { message } from "antd";
 import { removeProperty } from "../../redux/propertySlice";
 import ConfirmationModal from "./ConfirmationModal";
-import { message } from "antd";
 
 type Props = {
   id: string;
@@ -14,10 +14,17 @@ const RemovePropertyModal = (props: Props) => {
   const handleDelete = () => {
     dispatch(removeProperty({ id: props.id }));
     message.success("Property removed successfully");
-    props.callback && props.callback();
+    // Call the callback function to close the modal
+    props.callback?.();
   };
 
-  return <ConfirmationModal title="Remove Property" onConfirm={handleDelete} />;
+  return (
+    <ConfirmationModal
+      title="Remove Property"
+      onConfirm={handleDelete}
+      onCancel={() => props.callback?.()}
+    />
+  );
 };
 
 export default RemovePropertyModal;

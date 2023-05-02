@@ -7,6 +7,7 @@ export type TProperty = {
 export type TIngredient = {
   id: string;
   name: string;
+  // Pick<TProperty, "id">[] is used to reduce the amount of data stored in the TIngredient object
   properties: Pick<TProperty, "id">[];
   // propertyIds: string[];
 };

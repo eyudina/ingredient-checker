@@ -26,7 +26,7 @@ const propertySlice = createSlice({
   },
 });
 
-export const { addProperty, updateProperty, removeProperty } =
+export const { addProperty, removeProperty, updateProperty } =
   propertySlice.actions;
 
 export default propertySlice.reducer;

@@ -29,6 +29,7 @@ const AddPropertyModal = (props: Props) => {
   };
 
   const handleAddProperty = () => {
+    // If the property name is not empty, create a new property object and dispatch the addProperty action
     if (propertyName.trim() !== "") {
       const newProperty: TProperty = {
         id: uuidv4(),
@@ -41,7 +42,8 @@ const AddPropertyModal = (props: Props) => {
     } else {
       message.error("Property name cannot be empty");
     }
-    props.callback && props.callback();
+    // Call the callback function to close the modal
+    props.callback?.();
   };
 
   const modalContent = (

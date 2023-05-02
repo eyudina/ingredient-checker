@@ -30,11 +30,13 @@ const AddIngredientModal = (props: Props) => {
   };
 
   const handleAddIngredient = () => {
+    // If the ingredient name is not empty, create a new ingredient object and dispatch the addIngredient action
     if (ingredientName.trim() !== "") {
       const newIngredient: TIngredient = {
         id: uuidv4(),
         name: ingredientName,
         properties: allProperties
+          // Find selected properties by name from the Redux store and return the property id
           .filter((property) =>
             selectedProperties.find((p) => p === property.name)
           )
@@ -48,7 +50,8 @@ const AddIngredientModal = (props: Props) => {
     } else {
       message.error("Ingredient name cannot be empty");
     }
-    props.callback && props.callback();
+    // Call the callback function to close the modal
+    props.callback?.();
   };
 
   const modalContent = (
@@ -77,7 +80,7 @@ const AddIngredientModal = (props: Props) => {
       title="Add Ingredient"
       onConfirm={handleAddIngredient}
       okText="Add"
-      onCancel={() => props.callback && props.callback()}
+      onCancel={() => props.callback?.()}
     >
       {modalContent}
     </ConfirmationModal>

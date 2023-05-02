@@ -14,7 +14,9 @@ import { useCurrentUser, IsAdmin } from "./AuthUtils";
 import { UserRole } from "types/types";
 
 const { Header, Sider, Content } = Layout;
+
 const { useBreakpoint } = Grid;
+
 const items = [
   {
     key: "ingredients",
@@ -43,6 +45,7 @@ const AppLayout = () => {
   const screens = useBreakpoint();
   const isMobile = screens.xs;
 
+  // theme.useToken() is a custom hook that returns the theme object
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -57,10 +60,12 @@ const AppLayout = () => {
   const [pageTitle, setPageTitle] = useState("Ingredients");
   const [selectedKey, setSelectedKey] = useState("/");
 
+  // Collapses sidebar on mobile
   useEffect(() => {
     setCollapsed(isMobile);
   }, [isMobile]);
 
+  // Updates page title and selected menu item on route change
   useLayoutEffect(() => {
     switch (location.pathname) {
       case "/":
@@ -86,6 +91,7 @@ const AppLayout = () => {
 
   return (
     <Layout style={{ height: "auto", minHeight: "100vh" }}>
+      {/* If user is logged in and sidebar is set to true, show sidebar */}
       {currentUser && showSidebar && (
         <Sider
           width="200"
@@ -95,6 +101,7 @@ const AppLayout = () => {
           collapsed={collapsed}
         >
           <div style={{ textAlign: "center", marginTop: "20px" }}>
+            {/* If user is admin, apply orange background, otherwise show blue background */}
             <Avatar
               style={{
                 backgroundColor: isAdmin ? "#fde3cf" : "#e6f4ff",
@@ -102,6 +109,7 @@ const AppLayout = () => {
               }}
               size={48}
             >
+              {/* If user is admin, show "A", otherwise show "U" within the sidebar Avatar */}
               {isAdmin
                 ? UserRole.admin[0].toUpperCase()
                 : UserRole.user[0].toUpperCase()}
@@ -109,12 +117,11 @@ const AppLayout = () => {
             <h3 style={{ marginTop: "10px" }}>{isAdmin ? "Admin" : "User"}</h3>
           </div>
           <Menu theme="light" selectedKeys={[selectedKey]} mode="inline">
-            {currentUser &&
-              items.map((item) => (
-                <Menu.Item key={item.key} icon={item.icon}>
-                  <Link to={item.path}>{item.label}</Link>
-                </Menu.Item>
-              ))}
+            {items.map((item) => (
+              <Menu.Item key={item.key} icon={item.icon}>
+                <Link to={item.path}>{item.label}</Link>
+              </Menu.Item>
+            ))}
           </Menu>
         </Sider>
       )}
@@ -134,7 +141,8 @@ const AppLayout = () => {
               width: "100%",
             }}
           >
-            {currentUser && showSidebar && (
+            {/* If sidebar is set to true, show hamburger menu, otherwise show nothing */}
+            {showSidebar && (
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

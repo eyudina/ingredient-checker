@@ -16,18 +16,25 @@ import UpdateIngredientModal from "./modals/UpdateIngredientModal";
 import RemoveIngredientModal from "./modals/RemoveIngredientModal";
 import { IsAdmin } from "./AuthUtils";
 
-export const IngredientsTable = () => {
-  const navigate = useNavigate();
-
+const IngredientsTable = () => {
   const isAdmin = IsAdmin();
 
   const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
+
   const [recordToDelete, setRecordToDelete] = useState<TIngredient | undefined>(
     undefined
   );
   const [recordToUpdate, setRecordToUpdate] = useState<TIngredient | undefined>(
     undefined
   );
+
+  const handleDelete = () => {
+    setRecordToDelete(undefined);
+  };
+
+  const handleUpdate = () => {
+    setRecordToUpdate(undefined);
+  };
 
   const ingredients = useSelector((state: RootState) => state.ingredient);
   const properties = useSelector((state: RootState) => state.property);
@@ -38,7 +45,25 @@ export const IngredientsTable = () => {
     setSelectedProperties(values);
   };
 
+  // If clicking on the property tag, show the properties table filtered by the selected property
+  const navigate = useNavigate();
+
+  const handlePropertyClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const propertyName = e.currentTarget.innerText;
+    // The selected property name is passed as a query parameter
+    navigate(`/properties?name=${propertyName}`);
+  };
+
+  // The options for the Select (Search) component
+  const options = properties.map((property) => ({
+    text: property.name,
+    value: property.name,
+    selected: selectedProperties.includes(property.name),
+  }));
+
+  // Filter the ingredients table by the selected properties
   const filteredData =
+    // If select is empty, show all ingredients, otherwise filter by selected properties
     selectedProperties.length > 0
       ? ingredients.filter((ingredient) =>
           ingredient.properties.some((property) =>
@@ -49,48 +74,28 @@ export const IngredientsTable = () => {
         )
       : ingredients;
 
-  const options = properties.map((property) => ({
-    text: property.name,
-    value: property.name,
-    selected: selectedProperties.includes(property.name),
-  }));
-
-  const handleDelete = () => {
-    setRecordToDelete(undefined);
-  };
-
-  const handleUpdate = () => {
-    setRecordToUpdate(undefined);
-  };
-
-  const handlePropertyClick = (e: React.MouseEvent<HTMLSpanElement>) => {
-    const propertyName = e.currentTarget.innerText;
-    navigate(`/properties?name=${propertyName}`);
-  };
-
   const columns: ColumnsType<TIngredient> = [
     {
       title: "Name",
       dataIndex: "name",
+      key: "name",
       width: "25%",
-      render: (ingredient) => (
-        <div style={{ cursor: "default" }}>{ingredient}</div>
-      ),
+      render: (name) => <div style={{ cursor: "default" }}>{name}</div>,
       filters: Array.from(
+        // Get all unique ingredient names
         new Set(ingredients.map((ingredient) => ingredient.name))
       ).map((name) => ({
         text: name,
         value: name,
       })),
-
       onFilter: (value, record) => record.name.includes(value.toString()),
       filterSearch: true,
-
       sorter: (a: TIngredient, b: TIngredient) => a.name.localeCompare(b.name),
     },
     {
       title: "Properties",
       dataIndex: "properties",
+      key: "properties",
       filterSearch: true,
       render: (ingredientProperties: TProperty[]) => (
         <Space size="small" wrap>
@@ -114,9 +119,11 @@ export const IngredientsTable = () => {
         </Space>
       ),
     },
+    // If user is admin, show action column with edit and delete buttons
     isAdmin
       ? {
           title: "Action",
+          dataIndex: "action",
           key: "action",
           width: 120,
           fixed: "right",
@@ -147,16 +154,19 @@ export const IngredientsTable = () => {
       {recordToDelete && (
         <RemoveIngredientModal
           record={recordToDelete}
+          // When the modal is closed, setRecordToDelete is set to undefined
           callback={handleDelete}
         />
       )}
       {recordToUpdate && (
         <UpdateIngredientModal
           record={recordToUpdate}
+          // When the modal is closed, setRecordToUpdate is set to undefined
           callback={handleUpdate}
         />
       )}
       <Row gutter={[16, 16]} style={{ paddingBottom: 16 }}>
+        {/* If user is admin, allow add new ingredients to the table */}
         {isAdmin && (
           <Col flex={"none"}>
             <Button
@@ -168,6 +178,7 @@ export const IngredientsTable = () => {
             </Button>
             {showAddIngredientModal && (
               <AddIngredientModal
+                // When the modal is closed, setShowAddIngredientModal is set to false
                 callback={() => setShowAddIngredientModal(false)}
               />
             )}
@@ -193,3 +204,5 @@ export const IngredientsTable = () => {
     </div>
   );
 };
+
+export default IngredientsTable;

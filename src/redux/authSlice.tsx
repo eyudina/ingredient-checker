@@ -19,10 +19,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action: PayloadAction<any>) => {
-      state.user = action.payload.user;
-      state.isAdmin = action.payload?.role === UserRole.admin;
+      const { user, role } = action.payload;
+      state.user = user;
+      state.isAdmin = role === UserRole.admin;
     },
-    logoutSuccess: (state, action: PayloadAction<any>) => {
+    logoutSuccess: (state) => {
       state.user = null;
     },
   },

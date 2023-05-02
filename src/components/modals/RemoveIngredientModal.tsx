@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
-import { removeIngredient } from "../../redux/ingredientSlice";
-import ConfirmationModal from "./ConfirmationModal";
 import { message } from "antd";
 import { TIngredient } from "types/types";
+import { removeIngredient } from "../../redux/ingredientSlice";
+import ConfirmationModal from "./ConfirmationModal";
 
 type Props = {
   record: TIngredient;
@@ -15,11 +15,16 @@ const RemoveIngredientModal = (props: Props) => {
   const handleDelete = () => {
     dispatch(removeIngredient({ id: props.record.id }));
     message.success("Ingredient removed successfully");
-    props.callback && props.callback();
+    // Call the callback function to close the modal
+    props.callback?.();
   };
 
   return (
-    <ConfirmationModal title="Remove Ingredient" onConfirm={handleDelete} />
+    <ConfirmationModal
+      title="Remove Ingredient"
+      onConfirm={handleDelete}
+      onCancel={() => props.callback?.()}
+    />
   );
 };
 
